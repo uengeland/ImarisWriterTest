@@ -451,6 +451,7 @@ int main(int argc, char* argv[])
   }
   catch (bpArgumentException& err) {
     std::cout << err.what() << std::endl;
+    return -1 ;
   }
 
   return 0;

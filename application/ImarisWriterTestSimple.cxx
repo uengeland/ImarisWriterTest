@@ -13,22 +13,22 @@
  *   See the License for the specific language governing permissions and   *
  *   limitations under the License.                                        *
  ***************************************************************************/
-#include "imariswriter/interface/bpConverterTypes.h"
-#include "imariswriter/interface/bpImageConverter.h"
+#include "ImarisWriter/interface/bpConverterTypes.h"
+#include "ImarisWriter/interface/bpImageConverter.h"
 #include <iostream>
 
 using namespace bpConverterTypes;
 
 void RecordProgress(bpFloat aProgress, bpFloat aTP) {std::cout << "Progress: " << aProgress*100 << "%\n";}
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) try
 {
   tSize5D vImageSize(X, 2048, Y, 2048, Z, 100, C, 3, T, 1);
   tDimensionSequence5D vBlockDimensionSequence(X, Y, Z, C, T);
   tSize5D vBlockSize5D(X, 512, Y, 512, Z, 1, C, 1, T, 1);
   tSize5D vSample(X, 1, Y, 1, Z, 1, C, 1, T, 1);
   bpSize vBlockSize = vBlockSize5D[X] * vBlockSize5D[Y] * vBlockSize5D[Z];
-  bpString vOutputFile = "C:\\ImarisWriterTest\\ImarisWriterTest.ims";
+  bpString vOutputFile = argv[1] ; //"C:\\ImarisWriterTest\\ImarisWriterTest.ims";
   cOptions vOptions;
   vOptions.mNumberOfThreads = 12;
   vOptions.mCompressionAlgorithmType = eCompressionAlgorithmGzipLevel2;
@@ -60,4 +60,10 @@ int main(int argc, char* argv[])
   vImageConverter.Finish({ 0,0,0,10,10,10 }, vParameters, vTimeInfoPerTimePoint, vColorInfoPerChannel, false);
   delete vFileBlock;
   return 0;
+} catch(std::exception const & ex) {
+  std::cerr << "Fatal Error: " << ex.what() << std::endl ;
+  return -1 ;
+} catch(char const *msg) {
+  std::cerr << "Fatal Error: " << msg << std::endl ; 
+  return -2 ;
 }
